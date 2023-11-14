@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#button1").click(function () {
+          alert("using text() - " + $("#demo").text()); //will only extract text
+        });
+        $("#button2").click(function () {
+          alert("using html() - " + $("#demo").html()); //will extract text tag
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <p id="demo">This is <b> demo</b> text.</p>
+    <button id="button1">Text</button>
+    <button id="button2">HTML</button>
+  </body>
+</html>
+
+<p>Vedang 426</p>

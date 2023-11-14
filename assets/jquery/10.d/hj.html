@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SELECTING_DOM ELEMENTS_Vedang_Kanade</title>
+    <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+  </head>
+  <body>
+    <form action="">
+      <input type="checkbox" name="" id="" />
+      <input type="radio" name="" id="" />
+      <input type="text" name="" id="" />
+      <input type="button" value="" />
+    </form>
+    <form action="">
+      <input type="checkbox" name="" id="" />
+      <input type="radio" name="" id="" />
+      <input type="text" name="" id="" />
+      <input type="button" value="" />
+    </form>
+
+    <input type="checkbox" name="" id="" />
+    <input type="radio" name="" id="" />
+    <input type="text" name="" id="" />
+    <input type="button" value="" />
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        alert(
+          "Selected " +
+            jQuery("input", $("form")).length +
+            " inputs (TOTAL TAGS IN FORM TAG)"
+        );
+        alert(
+          "Selected " +
+            jQuery("input", document.forms[0]).length +
+            " inputs (TOTAL TAGS INFORM[0] TAG)"
+        );
+        alert(
+          "Selected " +
+            jQuery("input", "body").length +
+            " inputs (TOTAL TAGS IN BODY)"
+        );
+      });
+    </script>
+  </body>
+</html>

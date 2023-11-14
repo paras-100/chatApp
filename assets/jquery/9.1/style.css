@@ -1,0 +1,11 @@
+#box {
+  height: 200px;
+  width: 200px;
+  text-align: center;
+  color: aliceblue;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  justify-content: center;
+  background-color: burlywood;
+}
