@@ -154,7 +154,12 @@ const saveFriendRequest = asyncHandler(async (req, res) => {
   };
 
   if (user) {
-    user.friendRequests.push(friendUser);
+    user.friendRequests.push({
+      _id: friendUser._id,
+      name: friendUser.name,
+      email: friendUser.email,
+      profilePic: friendUser.profilePic,
+    });
     user.notifications.unshift(userNotification);
     user.save();
 
@@ -174,6 +179,7 @@ const saveFriendRequest = asyncHandler(async (req, res) => {
  */
 const acceptFriendRequest = asyncHandler(async (req, res) => {
   const { userEmail, friendEmail } = req.body;
+
   const user = await User.findOne({ email: userEmail });
   const friend = await User.findOne({ email: friendEmail });
 

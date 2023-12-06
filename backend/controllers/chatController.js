@@ -22,6 +22,18 @@ const createChat = asyncHandler(async (req, res) => {
       const newChat = await Chat.create({ members: [firstId, secondId] });
 
       if (newChat) {
+        const messages = await Message.create({ chatId: newChat._id });
+
+        if (messages) {
+          await messages.Chats.push({
+            type: "info",
+            text: "You can start your chat",
+          });
+          await messages.save();
+        } else {
+          res.status(501);
+          throw new Error("Message was not created");
+        }
         res.json({ newChat: true });
       }
     }
@@ -71,9 +83,6 @@ const findChat = asyncHandler(async (req, res) => {
 
     if (chat) {
       const messages = await Message.findOne({ chatId: chat._id });
-      messages.Chats.map((mes) => {
-        console.log(mes);
-      });
 
       if (messages) {
         res.status(200).json(messages);

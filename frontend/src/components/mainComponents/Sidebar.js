@@ -29,10 +29,15 @@ import {
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdNotificationsActive, MdNotifications } from "react-icons/md";
 import { IoIosClose } from "react-icons/io";
+import { TbReload } from "react-icons/tb";
 
 // Local imports
 import { FriendCard } from "../Card";
-import { logout, circulateFriendInfo } from "../../actions/userActions";
+import {
+  logout,
+  circulateFriendInfo,
+  getuserProfile,
+} from "../../actions/userActions";
 import ProfileBar from "../ProfileBar";
 import AddFriendBar from "../AddFriendBar";
 import FriendRequestBar from "../FriendRequestBar";
@@ -70,7 +75,7 @@ const Sidebar = () => {
     }
   }, [profile]);
 
-  const submitHandler = () => {
+  const logoutHandler = () => {
     dispatch(logout());
     if (profile) {
       socket.emit("removeOnlineUser", profile._id);
@@ -129,7 +134,30 @@ const Sidebar = () => {
               objectFit="cover"
               borderRadius="100px"
             />
-            <Flex justifyContent="space-between" width="150px">
+            <Flex justifyContent="space-between" width="200px">
+              <Button
+                color="#aebac1"
+                bgColor="#202c33"
+                borderRadius="20px"
+                paddingLeft="20px"
+                width="40px"
+                height="40px"
+                _hover={{ bg: "none" }}
+                _active={{ bgColor: "#374248" }}
+                onClick={() => {
+                  dispatch(getuserProfile());
+                }}
+              >
+                <Icon
+                  as={TbReload}
+                  color="#aebac1"
+                  boxSize={5}
+                  my="10px"
+                  mx="12px"
+                  mr="10px"
+                />
+              </Button>
+
               <Button
                 color="#aebac1"
                 bgColor="#202c33"
@@ -247,7 +275,7 @@ const Sidebar = () => {
                     bgColor="#233138"
                     _hover={{ bgColor: "#141D22" }}
                     height="40px"
-                    onClick={submitHandler}
+                    onClick={logoutHandler}
                   >
                     <Heading
                       color="#FF3131"

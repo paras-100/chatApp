@@ -30,6 +30,7 @@ import {
   USER_ADD_FRIEND_REQUEST_RESET,
   USER_SEARCH_FRIEND_RESET,
 } from "../constants/userConstants";
+import socket from "../socketFrontend";
 
 const AddFriendBar = ({ setAdd, userProfile }) => {
   const dispatch = useDispatch();

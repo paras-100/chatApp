@@ -10,10 +10,6 @@ const messageSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
-    Chats: {
-      type: Array,
-      default: [],
-    },
   },
   {
     timestamps: true,

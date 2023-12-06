@@ -90,9 +90,10 @@ const FriendRequestCard = ({
       <Flex minW="444px" height="73px" alignItems="center">
         <Flex>
           <Image
-            src={ProfilePhoto}
+            src={data.profilePic}
             boxSize="50px"
-            objectFit="contain"
+            borderRadius="100px"
+            objectFit="cover"
             mx="15px"
           />
         </Flex>
@@ -191,7 +192,7 @@ const NotificationCard = ({ notify }) => {
   );
 };
 
-const MessageCard = ({ Chat, id, length, index }) => {
+const MessageCard = ({ Chat, id, length, index, friendId }) => {
   useEffect(() => {
     if (length === index + 1) {
       document.querySelector(".messageEnd").scrollIntoView();
@@ -200,7 +201,7 @@ const MessageCard = ({ Chat, id, length, index }) => {
 
   return (
     <>
-      {Chat.senderId !== id ? (
+      {Chat.senderId === friendId ? (
         <Flex width="950px" mt="-50px">
           <Flex
             bgColor="#202c33"
@@ -256,6 +257,39 @@ const MessageCard = ({ Chat, id, length, index }) => {
             <Flex maxW="540px" justifyContent="end" ml="50px">
               <Heading color="#B1B1B1" fontSize="10px" fontWeight="400">
                 {Chat.time}
+              </Heading>
+            </Flex>
+          </Flex>
+        </Flex>
+      ) : null}
+
+      {Chat.type === "info" ? (
+        <Flex
+          width="950px"
+          height="25px"
+          mt="-50px"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Flex
+            bgColor="#182229"
+            direction="column"
+            maxW="540px"
+            px="10px"
+            py="5px"
+            borderRadius="7px"
+            alignItems="center"
+            justifyContent="center"
+            className={length == index + 1 ? "messageEnd" : null}
+          >
+            <Flex>
+              <Heading
+                fontSize="15px"
+                fontWeight="400"
+                color="#9fabb2"
+                wordBreak="break-word"
+              >
+                {Chat.text}
               </Heading>
             </Flex>
           </Flex>

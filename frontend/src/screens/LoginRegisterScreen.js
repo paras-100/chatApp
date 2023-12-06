@@ -83,18 +83,29 @@ const LoginRegisterScreen = () => {
 
   const otpGenerator = (e) => {
     e.preventDefault();
-    toast({
-      title: `OTP sent to you email`,
-      status: "success",
-      isClosable: true,
-      duration: 5000,
-    });
-    let digits = "0123456789";
-    let OTP = "";
-    for (let i = 0; i < 6; i++) {
-      OTP += digits[Math.floor(Math.random() * 10)];
+
+    let mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (registerEmail.match(mailFormat)) {
+      toast({
+        title: `OTP sent to you email`,
+        status: "success",
+        isClosable: true,
+        duration: 5000,
+      });
+      let digits = "0123456789";
+      let OTP = "";
+      for (let i = 0; i < 6; i++) {
+        OTP += digits[Math.floor(Math.random() * 10)];
+      }
+      setOtp(OTP);
+    } else {
+      toast({
+        title: `Invalid Email Address`,
+        status: "error",
+        isClosable: true,
+        duration: 5000,
+      });
     }
-    setOtp(OTP);
   };
 
   const verifyOtpHandler = (e) => {

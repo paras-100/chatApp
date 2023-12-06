@@ -325,6 +325,7 @@ const MainElement = () => {
                             id={profile ? profile._id : null}
                             length={chats.length}
                             index={index}
+                            friendId={friendInfo.id}
                           />
                         </Flex>
                       );
