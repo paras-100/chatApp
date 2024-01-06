@@ -8,18 +8,14 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  IconButton,
   Button,
   useDisclosure,
-  InputGroup,
-  InputRightElement,
   Spinner,
   useBoolean,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
+
 import EmojiPicker from "emoji-picker-react";
 
 // React icons import
@@ -30,11 +26,12 @@ import {
 } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { SiSololearn } from "react-icons/si";
-import { IoMdExit, IoMdSend, IoMdClose } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 import "@fontsource/roboto";
 
 // Local imports
 import { MessageCard } from "../Card";
+import ChatGptBar from "../ChatGptBar";
 import mainimage from "../../assets/mainImage.jpg";
 import mainDisplayImage from "../../assets/maindisplayimage.png";
 import { postCreateMessage } from "../../actions/communicateActions";
@@ -326,6 +323,7 @@ const MainElement = () => {
                             length={chats.length}
                             index={index}
                             friendId={friendInfo.id}
+                            gptOpen={isOpen}
                           />
                         </Flex>
                       );
@@ -410,71 +408,7 @@ const MainElement = () => {
       ) : null}
 
       {/* CHATGPT */}
-      {isOpen && (
-        <Flex
-          direction="column"
-          width="450px"
-          height="670px"
-          zIndex="3"
-          bgColor="#111B21"
-          borderLeft="1px"
-          borderColor="#616161"
-        >
-          {/* Header */}
-          <Flex minH="60px" width="450px" bgColor="#191A19" alignItems="center">
-            <Flex mx="20px" alignItems="center">
-              <Button
-                width="40px"
-                borderRadius="50px"
-                bgColor="#2a3942"
-                _hover={{ bgColor: "#141D22" }}
-                onClick={onClose}
-              >
-                <Icon as={IoMdExit} color="#FF3535" boxSize={6} />
-              </Button>
-              <Heading
-                as="h2"
-                ml="20px"
-                color="#D8E9A8"
-                fontSize="25px"
-                fontWeight="600"
-              >
-                ChatGPT
-              </Heading>
-            </Flex>
-          </Flex>
-
-          {/* ChatScreen */}
-          <Flex
-            minH="545px"
-            minW="450px"
-            bgColor="#1E5128"
-            bgRepeat="no-repeat"
-          ></Flex>
-
-          {/* Input */}
-          <Flex
-            minH="65px"
-            width="450px"
-            bgColor="#4E9F3D"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <InputGroup>
-              <Input
-                width="420px"
-                border="none"
-                bgColor="#D8E9A8"
-                placeholder="Send a message..."
-                ml="20px"
-              />
-              <InputRightElement>
-                <Icon as={IoMdSend} color="#1E5128" boxSize={6} mr="20px" />
-              </InputRightElement>
-            </InputGroup>
-          </Flex>
-        </Flex>
-      )}
+      {isOpen && <ChatGptBar onClose={onClose} />}
 
       {/* Display Screen */}
       {!friendChat && !loading ? (

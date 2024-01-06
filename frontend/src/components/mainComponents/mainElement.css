@@ -5,9 +5,19 @@
   overflow-y: scroll;
   overflow-x: hidden;
 }
+.gptScroll {
+  background-color: #d8e9a8;
+  display: flex;
+  flex-direction: column;
+  width: 430px;
+  height: 530px;
+  border-radius: 20px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 ::-webkit-scrollbar {
   background-color: transparent;
-  width: 5px;
+  width: 0px;
 }
 
 ::-webkit-scrollbar-thumb {

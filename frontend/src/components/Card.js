@@ -6,7 +6,8 @@ import {
   Icon,
   Button,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import "./mainComponents/MainElement";
 
 // React Icons
 
@@ -192,7 +193,7 @@ const NotificationCard = ({ notify }) => {
   );
 };
 
-const MessageCard = ({ Chat, id, length, index, friendId }) => {
+const MessageCard = ({ Chat, id, length, index, friendId, gptOpen }) => {
   useEffect(() => {
     if (length === index + 1) {
       document.querySelector(".messageEnd").scrollIntoView();
@@ -209,6 +210,7 @@ const MessageCard = ({ Chat, id, length, index, friendId }) => {
             maxW="540px"
             px="10px"
             py="10px"
+            mx={gptOpen ? "225px" : null}
             __css={{ borderRadius: "2px 15px 15px 15px " }}
             className={length == index + 1 ? "messageEnd" : null}
           >
@@ -240,6 +242,7 @@ const MessageCard = ({ Chat, id, length, index, friendId }) => {
             maxW="540px"
             px="10px"
             py="10px"
+            mx={gptOpen ? "225px" : null}
             __css={{ borderRadius: "15px 2px 15px 15px " }}
             className={length == index + 1 ? "messageEnd" : null}
           >
@@ -299,4 +302,100 @@ const MessageCard = ({ Chat, id, length, index, friendId }) => {
   );
 };
 
-export { FriendCard, FriendRequestCard, NotificationCard, MessageCard };
+const AIChat = ({ userMessage, response }) => {
+  const [chats, setChats] = useState([]);
+
+  const length = chats.length;
+
+  useEffect(() => {
+    if (!userMessage && !response) return;
+
+    setChats([...chats, userMessage || response]);
+  }, [userMessage, response]);
+
+  useEffect(() => {
+    console.log("i am here");
+    if (length) {
+      document.querySelector("#messageEnd").scrollIntoView();
+    }
+  }, [length]);
+
+  return (
+    <div className="gptScroll">
+      <Flex
+        width="430px"
+        height="25px"
+        mt="5px"
+        mb="5px"
+        bgColor="#191a19"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Heading
+          fontSize="15px"
+          fontWeight="400"
+          color="#d8e9a8"
+          lineHeight="23px"
+          wordBreak="break-word"
+        >
+          Start talking with Chatgpt 🔍
+        </Heading>
+      </Flex>
+      {Object.values(chats).map((mes, index) => {
+        return (
+          <>
+            {mes.role ? (
+              <Flex width="430px" mt="5px" mb="5px">
+                <Flex
+                  bgColor="#1e5128"
+                  direction="column"
+                  maxW="340px"
+                  px="10px"
+                  py="10px"
+                  mx="10px"
+                  __css={{ borderRadius: "2px 15px 15px 15px " }}
+                  id={length == index + 1 ? "messageEnd" : null}
+                >
+                  <Heading
+                    fontSize="15px"
+                    fontWeight="400"
+                    color="white"
+                    lineHeight="23px"
+                    wordBreak="break-word"
+                  >
+                    {mes.content}
+                  </Heading>
+                </Flex>
+              </Flex>
+            ) : (
+              <Flex width="430px" mt="5px" mb="5px" justifyContent="end">
+                <Flex
+                  bgColor="#191a19"
+                  direction="column"
+                  maxW="320px"
+                  px="10px"
+                  py="10px"
+                  mx="10px"
+                  __css={{ borderRadius: "15px 2px 15px 15px " }}
+                  id={length == index + 1 ? "messageEnd" : null}
+                >
+                  <Heading
+                    fontSize="15px"
+                    fontWeight="400"
+                    color="#d8e9a8"
+                    lineHeight="23px"
+                    wordBreak="break-word"
+                  >
+                    {mes}
+                  </Heading>
+                </Flex>
+              </Flex>
+            )}
+          </>
+        );
+      })}
+    </div>
+  );
+};
+
+export { FriendCard, FriendRequestCard, NotificationCard, MessageCard, AIChat };

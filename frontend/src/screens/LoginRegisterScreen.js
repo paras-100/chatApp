@@ -233,6 +233,7 @@ const LoginRegisterScreen = () => {
 
                   <Link
                     as={RouterLink}
+                    to="/about"
                     color="#FF5151"
                     _hover={{ textDecoration: "none", color: "red" }}
                   >
