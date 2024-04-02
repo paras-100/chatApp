@@ -27,6 +27,10 @@ import {
   USER_CLEAR_NOTIFICATIONS_SUCCESS,
   USER_ADD_FRIEND_INFO,
   USER_ADD_FRIEND_RESET,
+  REMOVE_FRIEND_FAIL,
+  REMOVE_FRIEND_REQUEST,
+  REMOVE_FRIEND_RESET,
+  REMOVE_FRIEND_SUCCESS,
 } from "../constants/userConstants";
 
 import { COM_FIND_CHAT_RESET } from "../constants/commuincateConstants";
@@ -309,3 +313,40 @@ export const clearNotifications = (email) => async (dispatch, getState) => {
     });
   }
 };
+
+export const friendRemover =
+  (userId, friendId, chatId) => async (dispatch, getState) => {
+    try {
+      dispatch({ type: REMOVE_FRIEND_REQUEST });
+
+      const {
+        userLogin: { loginUserInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${loginUserInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/users/removeFriend",
+        {
+          userId,
+          friendId,
+          chatId,
+        },
+        config
+      );
+
+      dispatch({ type: REMOVE_FRIEND_SUCCESS, payload: data });
+    } catch (err) {
+      dispatch({
+        type: REMOVE_FRIEND_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
+      });
+    }
+  };

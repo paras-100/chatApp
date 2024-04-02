@@ -21,8 +21,6 @@ const ChatGptBar = ({ onClose }) => {
   const [responseText, setResponseText] = useState("");
   const [load, setLoad] = useBoolean(false);
 
-  console.log(process.env.REACT_APP_CHAT_GPT);
-
   const handlePrompt = async (e) => {
     if (!prompt || prompt === "") return;
 

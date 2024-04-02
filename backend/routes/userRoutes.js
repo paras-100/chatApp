@@ -9,6 +9,7 @@ import {
   acceptFriendRequest,
   declineFriendRequest,
   notificationClearance,
+  removeFriend,
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -23,5 +24,6 @@ router.route("/addFriendRequest").post(protect, saveFriendRequest);
 router.route("/acceptFriendRequest").post(protect, acceptFriendRequest);
 router.route("/declineFriendRequest").post(protect, declineFriendRequest);
 router.route("/clearNotifications").post(protect, notificationClearance);
+router.route("/removeFriend").post(removeFriend);
 
 export default router;

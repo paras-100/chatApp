@@ -2,6 +2,8 @@ import asyncHandler from "express-async-handler";
 
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateTokens.js";
+import Chat from "../models/chatModel.js";
+import Message from "../models/messageModel.js";
 
 /**
  *  @desc		Auth User
@@ -59,7 +61,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 /**
- *  @desc		Get User Profile
+ *  @desc		User Profile
  *  @route	POST /api/users/profile
  * 	@access	private
  */
@@ -83,7 +85,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 /**
- *  @desc		Get User Profile
+ *  @desc		Search Friend
  *  @route	GET /api/users/searchFriend
  * 	@access	private
  */
@@ -105,7 +107,7 @@ const sendSearchFriend = asyncHandler(async (req, res) => {
 });
 
 /**
- *  @desc		Get User Profile
+ *  @desc		Save Profile Image
  *  @route	GET /api/uploads
  * 	@access	private
  */
@@ -131,7 +133,7 @@ const saveProfileImage = asyncHandler(async (req, res) => {
 });
 
 /**
- *  @desc		Get User Profile
+ *  @desc		Save Friend Request
  *  @route	GET /api/users/addFriendRequest
  * 	@access	private
  */
@@ -173,7 +175,7 @@ const saveFriendRequest = asyncHandler(async (req, res) => {
 });
 
 /**
- *  @desc		Get User Profile
+ *  @desc		Accept Friend Request
  *  @route	GET /api/users/acceptFriendRequest
  * 	@access	private
  */
@@ -239,7 +241,7 @@ const acceptFriendRequest = asyncHandler(async (req, res) => {
 });
 
 /**
- *  @desc		Get User Profile
+ *  @desc		Decline Friend Request
  *  @route	GET /api/users/declineFriendRequest
  * 	@access	private
  */
@@ -287,7 +289,7 @@ const declineFriendRequest = asyncHandler(async (req, res) => {
 });
 
 /**
- *  @desc		Get User Profile
+ *  @desc		Clear Notification
  *  @route	GET /api/users/clearNotifications
  * 	@access	private
  */
@@ -305,6 +307,72 @@ const notificationClearance = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ *  @desc		Remove Friend
+ *  @route	POST /api/users/removeFriend
+ * 	@access	private
+ */
+const removeFriend = asyncHandler(async (req, res) => {
+  const { userId, friendId, chatId } = req.body;
+
+  const user = await User.findById(userId);
+  const friendUser = await User.findById(friendId);
+
+  const date = new Date();
+
+  const userNotification = {
+    message: `You removed ${friendUser.name} from friendlist `,
+    date: `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
+    time: `${date.toLocaleTimeString()}`,
+  };
+
+  const friendNotification = {
+    message: `${user.name} removed you from friendlist`,
+    date: `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
+    time: `${date.toLocaleTimeString()}`,
+  };
+
+  if (!userId || !friendId || !chatId) {
+    res.status(404);
+    throw new Error("Details Missing");
+  } else if (userId && friendId && chatId) {
+    // Delete ChatId and Messages
+    const messageDelete = await Message.deleteOne({ chatId: chatId });
+    const deleteChat = await Chat.deleteOne({ _id: chatId });
+
+    // Remove friend from user
+    const friendRemoved = await user.userFriends.map((friend, index) => {
+      if (friend.id == friendId) {
+        user.userFriends.splice(index, 1);
+        return true;
+      }
+    });
+
+    // Remove user from friend
+    const userRemoved = await friendUser.userFriends.map((friend, index) => {
+      if (friend.id == userId) {
+        friendUser.userFriends.splice(index, 1);
+        return true;
+      }
+    });
+
+    if (friendRemoved && userRemoved && messageDelete && deleteChat) {
+      // Send Notifications to users
+      user.notifications.unshift(userNotification);
+      friendUser.notifications.unshift(friendNotification);
+
+      // Update Users in Database
+      await user.save();
+      await friendUser.save();
+
+      res.json([messageDelete, deleteChat]);
+    } else {
+      res.status(404);
+      throw new Error("Friend not found");
+    }
+  }
+});
+
 export {
   authUser,
   getUserProfile,
@@ -315,4 +383,5 @@ export {
   acceptFriendRequest,
   declineFriendRequest,
   notificationClearance,
+  removeFriend,
 };

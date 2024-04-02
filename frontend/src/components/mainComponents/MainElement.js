@@ -11,7 +11,14 @@ import {
   Button,
   useDisclosure,
   Spinner,
+  AlertDialog,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
   useBoolean,
+  AlertDialogBody,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
@@ -32,9 +39,13 @@ import "@fontsource/roboto";
 // Local imports
 import { MessageCard } from "../Card";
 import ChatGptBar from "../ChatGptBar";
+import FriendInfoBar from "../FriendInfoBar";
 import mainimage from "../../assets/mainImage.jpg";
 import mainDisplayImage from "../../assets/maindisplayimage.png";
-import { postCreateMessage } from "../../actions/communicateActions";
+import {
+  postCreateMessage,
+  postDeleteChats,
+} from "../../actions/communicateActions";
 import {
   COM_SEND_MESSAGE_RESET,
   COM_SEND_MESSAGE_SUCCESS,
@@ -49,6 +60,8 @@ const MainElement = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [emojiPicker, setEmojiPicker] = useBoolean(false);
+  const [fiOpen, setFiOpen] = useBoolean(false);
+  const [deleteChatAlert, setDeleteChatAlert] = useBoolean(false);
 
   const [text, setText] = useState();
   const [chats, setChats] = useState([]);
@@ -112,7 +125,7 @@ const MainElement = () => {
         <Flex
           direction="column"
           bgColor="#111B21"
-          minW={isOpen ? "600px" : "1050px"}
+          minW={isOpen || fiOpen ? "600px" : "1050px"}
           maxH="670px"
           borderLeft="1px"
           borderColor="#616161"
@@ -121,13 +134,13 @@ const MainElement = () => {
           {/* Header */}
           <Flex
             minH="60px"
-            width={isOpen ? "600px" : "1050px"}
+            width={isOpen || fiOpen ? "600px" : "1050px"}
             bgColor="#202c33"
             alignItems="center"
           >
             <Flex
               justifyContent="space-between"
-              width={isOpen ? "600px" : "1050px"}
+              width={isOpen || fiOpen ? "600px" : "1050px"}
               mx="20px"
               mt="5px"
             >
@@ -203,21 +216,27 @@ const MainElement = () => {
                     border="none"
                     width="230px"
                     pos="relative"
-                    right={isOpen ? "180px" : null}
+                    right={isOpen || fiOpen ? "180px" : null}
                   >
                     <MenuItem
                       bgColor="#233138"
                       _hover={{ bgColor: "#141D22" }}
                       height="40px"
                     >
-                      <Heading
-                        color="#bcc2c7"
+                      <Button
+                        pr="140px"
+                        bg="none"
+                        color="#95a1a8"
                         fontSize="14px"
                         fontWeight="500"
-                        ml="10px"
+                        ml="5px"
+                        _hover={{ bg: "none" }}
+                        onClick={() => {
+                          setFiOpen.on();
+                        }}
                       >
                         Friend Info
-                      </Heading>
+                      </Button>
                     </MenuItem>
                     <MenuItem
                       bgColor="#233138"
@@ -244,28 +263,18 @@ const MainElement = () => {
                       _hover={{ bgColor: "#141D22" }}
                       height="40px"
                     >
-                      <Heading
-                        color="#bcc2c7"
-                        fontSize="14px"
-                        fontWeight="500"
-                        ml="10px"
-                      >
-                        Delete Chats
-                      </Heading>
-                    </MenuItem>
-                    <MenuItem
-                      bgColor="#233138"
-                      _hover={{ bgColor: "#141D22" }}
-                      height="40px"
-                    >
-                      <Heading
+                      <Button
+                        pr="140px"
+                        bg="none"
                         color="#FF5454"
                         fontSize="14px"
                         fontWeight="500"
-                        ml="10px"
+                        ml="20px"
+                        _hover={{ bg: "none" }}
+                        onClick={() => setDeleteChatAlert.on()}
                       >
-                        Block
-                      </Heading>
+                        Delete Chats
+                      </Button>
                     </MenuItem>
                   </MenuList>
                 </Menu>
@@ -276,7 +285,7 @@ const MainElement = () => {
           {/* Main Element */}
           <Flex
             minH="545px"
-            minW={isOpen ? "600px" : "1050px"}
+            minW={isOpen || fiOpen ? "600px" : "1050px"}
             bgColor="#0b141a"
             bgImage={mainimage}
             bgSize="1050px"
@@ -323,7 +332,7 @@ const MainElement = () => {
                             length={chats.length}
                             index={index}
                             friendId={friendInfo.id}
-                            gptOpen={isOpen}
+                            gptOpen={isOpen || fiOpen}
                           />
                         </Flex>
                       );
@@ -336,14 +345,14 @@ const MainElement = () => {
           {/* Input */}
           <Flex
             minH="65px"
-            width={isOpen ? "600px" : "1050px"}
+            width={isOpen || fiOpen ? "600px" : "1050px"}
             bgColor="#202c33"
             alignItems="center"
           >
             <Flex
               alignItems="center"
               justifyContent="space-between"
-              width={isOpen ? "650px" : "1050px"}
+              width={isOpen || fiOpen ? "650px" : "1050px"}
               mx="20px"
             >
               <Button
@@ -378,7 +387,7 @@ const MainElement = () => {
               <Input
                 value={text}
                 color="white"
-                width={isOpen ? "450px" : "910px"}
+                width={isOpen || fiOpen ? "450px" : "910px"}
                 border="none"
                 bgColor="#2a3942"
                 placeholder="Type a message..."
@@ -409,6 +418,9 @@ const MainElement = () => {
 
       {/* CHATGPT */}
       {isOpen && <ChatGptBar onClose={onClose} />}
+
+      {/* Friend Info */}
+      {fiOpen && <FriendInfoBar closeBar={setFiOpen} />}
 
       {/* Display Screen */}
       {!friendChat && !loading ? (
@@ -492,6 +504,38 @@ const MainElement = () => {
           />
         </Flex>
       ) : null}
+
+      {/* Delete Chat Alert Modal */}
+      <>
+        <AlertDialog
+          motionPreset="slideInBottom"
+          isOpen={deleteChatAlert}
+          isCentered
+        >
+          <AlertDialogOverlay />
+
+          <AlertDialogContent bgColor="#111b21">
+            <AlertDialogHeader color="#e53e3e">Delete Chats?</AlertDialogHeader>
+            <AlertDialogCloseButton color="white" />
+            <AlertDialogBody color="white">
+              Your all chats with {friendInfo?.name} will be deleted.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={() => setDeleteChatAlert.off()}>No</Button>
+              <Button
+                colorScheme="red"
+                ml={3}
+                onClick={() => {
+                  setDeleteChatAlert.off();
+                  dispatch(postDeleteChats(friendChat.chatId));
+                }}
+              >
+                Yes
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
     </>
   );
 };

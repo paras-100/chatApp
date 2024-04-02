@@ -70,7 +70,7 @@ export const createMessage = asyncHandler(async (req, res) => {
 
 /**
  *  @desc		Create Message
- *  @route	POST /api/messages/:chatId
+ *  @route	GET /api/messages/:chatId
  * 	@access	private
  */
 export const getMessages = asyncHandler(async (req, res) => {
@@ -88,5 +88,27 @@ export const getMessages = asyncHandler(async (req, res) => {
   } catch (err) {
     res.status(500);
     throw new Error(err ? err : "Internal Server Error");
+  }
+});
+
+/**
+ *  @desc		Delete Message
+ *  @route	POST /api/messages/deleteChats
+ * 	@access	private
+ */
+export const deleteChats = asyncHandler(async (req, res) => {
+  const { chatId } = req.body;
+
+  const messageDoc = (await Message.find({ chatId }))[0];
+
+  if (messageDoc) {
+    messageDoc.Chats = messageDoc.Chats.slice(0, 1);
+
+    await messageDoc.save();
+
+    res.status(200).json(messageDoc);
+  } else {
+    res.json(404);
+    throw new Error("ChatID not found");
   }
 });

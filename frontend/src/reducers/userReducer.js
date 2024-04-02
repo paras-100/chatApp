@@ -29,6 +29,10 @@ import {
   USER_CLEAR_NOTIFICATIONS_RESET,
   USER_ADD_FRIEND_INFO,
   USER_ADD_FRIEND_RESET,
+  REMOVE_FRIEND_FAIL,
+  REMOVE_FRIEND_REQUEST,
+  REMOVE_FRIEND_RESET,
+  REMOVE_FRIEND_SUCCESS,
 } from "../constants/userConstants";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -138,6 +142,22 @@ export const friendInfoReducer = (state = {}, action) => {
       return { friendInfo: action.payload };
     case USER_ADD_FRIEND_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+
+export const removeFriendReducer = (state = {}, action) => {
+  switch (action.type) {
+    case REMOVE_FRIEND_REQUEST:
+      return { loading: true };
+    case REMOVE_FRIEND_SUCCESS:
+      return { loading: false, friendRemoved: action.payload };
+    case REMOVE_FRIEND_FAIL:
+      return { loading: false, error: action.payload };
+    case REMOVE_FRIEND_RESET:
+      return {};
+
     default:
       return state;
   }

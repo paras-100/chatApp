@@ -17,6 +17,8 @@ import {
   PinInputField,
   HStack,
   useToast,
+  Image,
+  Box,
 } from "@chakra-ui/react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -27,6 +29,14 @@ import emailjs from "@emailjs/browser";
 
 import { login, register } from "../actions/userActions";
 import Message from "../components/Message";
+
+import sendArrow from "../assets/sendArrow.png";
+import boyOnPhone from "../assets/boyOnPhone.png";
+import profile1 from "../assets/profile1.png";
+import profile2 from "../assets/profile2.png";
+import profile3 from "../assets/profile3.png";
+import profile4 from "../assets/profile4.png";
+import bgImage from "../assets/loginBackground.jpg";
 
 const LoginRegisterScreen = () => {
   const dispatch = useDispatch();
@@ -133,8 +143,112 @@ const LoginRegisterScreen = () => {
   // <Button onClick={onOpen}>Open Modal</Button>
 
   return (
-    <Flex bgColor="#E6E6E6" as="main" minH="100vh" pos="relative">
-      <Flex pos="absolute" top="60px" left="600px" minH="85vh">
+    <Flex
+      bgColor="#E6E6E6"
+      as="main"
+      minH="100vh"
+      pos="relative"
+      bgImage={bgImage}
+    >
+      {/* ARROW IMAGE */}
+      <Image
+        src={sendArrow}
+        width="250px"
+        objectFit="contain"
+        pos="absolute"
+        left="-50px"
+        top="-30px"
+      />
+
+      <Image
+        src={profile3}
+        width="250px"
+        objectFit="contain"
+        pos="absolute"
+        left="450px"
+        top="300px"
+      />
+
+      <Image
+        src={profile2}
+        width="200px"
+        objectFit="contain"
+        pos="absolute"
+        left="650px"
+        top="100px"
+        transform="rotate(20deg)"
+      />
+
+      <Image
+        src={profile4}
+        width="150px"
+        objectFit="contain"
+        pos="absolute"
+        left="870px"
+        top="0px"
+        transform="rotate(40deg)"
+      />
+      <Image
+        src={profile1}
+        width="100px"
+        objectFit="contain"
+        pos="absolute"
+        left="1070px"
+        top="-30px"
+        transform="rotate(65deg)"
+      />
+
+      {/* Lets get started */}
+      <Flex
+        pos="relative"
+        top="200px"
+        left="900px"
+        width="475px"
+        height="400px"
+        direction="column"
+        alignItems="end"
+        bgColor="white"
+        borderRadius="50px"
+        px="10px"
+        py="10px"
+      >
+        <Flex
+          bgColor="#4d426d"
+          pos="absolute"
+          justifyContent="space-between"
+          width="190px"
+          top="40px"
+          right="170px"
+          px="10px"
+          py="5px"
+          borderRadius="10px 10px 1px 10px "
+        >
+          <Heading fontSize="20px" color="white">
+            Let's get started
+          </Heading>
+        </Flex>
+        <Image src={boyOnPhone} objectFit="contain" width="200px" />
+        <Flex
+          borderRadius="50px"
+          justifyContent="space-between"
+          width="250px"
+          mr="190px"
+        >
+          <Image src={sendArrow} objectFit="contain" width="50px" />
+          <Heading fontSize="50px" color="#4d426d" letterSpacing="-3px">
+            We Chat
+          </Heading>
+        </Flex>
+        <Flex mt="20px" mx="25px" alignItems="center" width="400px">
+          <Heading fontSize="20px" fontWeight="500">
+            Connect with each other with chatting. Enjoy safe and private
+            texting.Portable chatting app.
+          </Heading>
+        </Flex>
+      </Flex>
+
+      {/* LOGIN SIGNUP COMPONENT */}
+      <Flex pos="absolute" top="60px" left="100px" minH="85vh">
         {/* Login Card */}
         <motion.div
           animate={rotateLogin ? { rotateY: 180, translateX: "403px" } : "none"}

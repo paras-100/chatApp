@@ -9,11 +9,13 @@ import {
   userAddFriendReducer,
   userNotificationReducer,
   friendInfoReducer,
+  removeFriendReducer,
 } from "./reducers/userReducer";
 import {
   comCreateChatReducer,
   comFindChatReducer,
   comSendMessageReducer,
+  comDeleteMessageReducer,
 } from "./reducers/communicateReducer";
 import { setSocketReducer } from "./reducers/socketReducer";
 
@@ -27,6 +29,8 @@ const reducer = combineReducers({
   createChat: comCreateChatReducer,
   findFriendChat: comFindChatReducer,
   sendMessage: comSendMessageReducer,
+  deleteMessages: comDeleteMessageReducer,
+  removeFriend: removeFriendReducer,
   webSocket: setSocketReducer,
 });
 

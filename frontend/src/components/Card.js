@@ -16,7 +16,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { FaUserFriends } from "react-icons/fa";
 
 // Local Imports
-import ProfilePhoto from "../assets/profile 4.png";
+import ProfilePhoto from "../assets/profile4.png";
 
 const FriendCard = ({ data, findChatHandler, circulateFriendInfoHandler }) => {
   const findChat = () => {

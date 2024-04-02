@@ -43,6 +43,14 @@ import AddFriendBar from "../AddFriendBar";
 import FriendRequestBar from "../FriendRequestBar";
 import NotificationBar from "../NotificationBar";
 import { getFindChat } from "../../actions/communicateActions";
+import {
+  COM_DELETE_CHAT_RESET,
+  COM_FIND_CHAT_RESET,
+} from "../../constants/commuincateConstants";
+import {
+  REMOVE_FRIEND_RESET,
+  USER_ADD_FRIEND_RESET,
+} from "../../constants/userConstants";
 import socket from "../../socketFrontend";
 
 const Sidebar = () => {
@@ -60,6 +68,15 @@ const Sidebar = () => {
   const userProfile = useSelector((state) => state.userProfile);
   const { profile } = userProfile;
 
+  const deleteMessages = useSelector((state) => state.deleteMessages);
+  const { deleteChat } = deleteMessages;
+
+  const chatFriendInfo = useSelector((state) => state.chatFriendInfo);
+  const { friendInfo } = chatFriendInfo;
+
+  const removeFriend = useSelector((state) => state.removeFriend);
+  const { friendRemoved } = removeFriend;
+
   const [friends, setFriends] = useState({});
   const [search, setSearch] = useState("");
 
@@ -74,6 +91,20 @@ const Sidebar = () => {
       setFirstId(profile._id);
     }
   }, [profile]);
+
+  useEffect(() => {
+    if (deleteChat) {
+      findChatHandler(friendInfo.id);
+      dispatch({ type: COM_DELETE_CHAT_RESET });
+    }
+
+    if (friendRemoved) {
+      dispatch(getuserProfile());
+      dispatch({ type: REMOVE_FRIEND_RESET });
+      dispatch({ type: USER_ADD_FRIEND_RESET });
+      dispatch({ type: COM_FIND_CHAT_RESET });
+    }
+  }, [deleteChat, friendRemoved]);
 
   const logoutHandler = () => {
     dispatch(logout());
